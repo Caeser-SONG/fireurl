@@ -10,6 +10,21 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var db *mongo.Database
+
+func InitMongo() {
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	ctx := context.TODO()
+	client, err := mongo.Connect(ctx, clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = client.Ping(ctx, nil)
+	fmt.Println("Connected to MongoDB!")
+	db = client.Database("test")
+
+}
+
 type Trainer struct {
 	Name string
 	Age  int
