@@ -13,4 +13,7 @@ func RegisterRouter(e *gin.Engine) {
 		c.JSON(http.StatusOK, "hello")
 	})
 	g1.GET("qq", control.Hello)
+	g1.POST("create", control.GetShortURL)
+
+	e.GET("/:short", control.Default)
 }

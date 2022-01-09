@@ -26,9 +26,15 @@ func InitMongo() {
 }
 
 type Trainer struct {
-	Name string
-	Age  int
-	City string
+	Name string `bson:"name"`
+	Age  int    `bson:"age"`
+	City string `bson:"city"`
+}
+
+type URLData struct {
+	ShortURL  string `json:"short_url" bson:"short_url"`
+	Exptime   int64  `json:"exp_time" bson:"exp_time"`
+	OriginURL string `json:"origin_url" bson:"origin_url"`
 }
 
 func test() {
@@ -50,5 +56,10 @@ func test() {
 	insert, err := collection.InsertOne(ctx, ash)
 
 	fmt.Println("aaaa", insert.InsertedID)
+
+}
+
+// 存入db中
+func SaveURL(d *URLData) {
 
 }
