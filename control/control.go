@@ -19,9 +19,10 @@ func Hello(c *gin.Context) {
 func Default(c *gin.Context) {
 	s := c.Param("short")
 	fmt.Println(s)
-	//todo chaxuan
-	ourl := "www.baidu.com"
-	c.Redirect(http.StatusFound, ourl)
+	//todo chaxun
+	//ourl := "http://81.70.91.175:8888/v1/test"
+	ourl := "https://baidu.com"
+	c.Redirect(http.StatusMovedPermanently, ourl)
 }
 
 // 获取短链接
@@ -35,11 +36,14 @@ func GetShortURL(c *gin.Context) {
 	if !ok {
 		log.Fatal("no param exptime")
 	}
+
 	d.OriginURL = ourl
+	d.Exptime = time
 	fmt.Println(ourl)
 	fmt.Println(time)
+
 	// 长化短
-	//	shortURL := lib.Trans2short(ourl)
+	//shortURL := lib.Trans2short(ourl)
 
 	// model.SaveURL()
 }

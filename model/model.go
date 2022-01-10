@@ -59,7 +59,7 @@ func test() {
 
 }
 
-// 存入db中
+// 存储url
 func SaveURL(d *URLData) {
 
 }
