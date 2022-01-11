@@ -61,5 +61,25 @@ func test() {
 
 // 存储url
 func SaveURL(d *URLData) {
+	collection := db.Collection("urls")
+	insert, err := collection.InsertOne(context.TODO(), d)
+	if err != nil {
+		fmt.Println("insert failed")
+	}
+	fmt.Println(insert)
+}
+
+func GetURL(s string) {
+
+	collection := db.Collection("urls")
+	filter := bson.M{"short_url": s}
+	if cursor, err := collection.Find(context.TODO(), filter, options.Find().SetSkip(0), options.Find().SetLimit(1)); err != nil {
+		fmt.Println("find fail")
+	}
+	defer func() {
+		if err = cursor.Close(context.TODO()); err != nil {
+			fmt.Println("cursor fial")
+		}
+	}()
 
 }

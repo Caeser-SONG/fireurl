@@ -5,7 +5,9 @@ import (
 	"log"
 	"net/http"
 
+	"fireurl/lib"
 	"fireurl/model"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,16 +36,22 @@ func GetShortURL(c *gin.Context) {
 	}
 	time, ok := c.GetPostForm("exp_time")
 	if !ok {
-		log.Fatal("no param exptime")
+		fmt.Println("no param exptime")
 	}
 
 	d.OriginURL = ourl
-	d.Exptime = time
+	time1, err := strconv.ParseInt(time, 10, 64)
+	if err != nil {
+		fmt.Println("time tans into int64 fail")
+	}
+	d.Exptime = time1
 	fmt.Println(ourl)
 	fmt.Println(time)
 
 	// 长化短
-	//shortURL := lib.Trans2short(ourl)
+	shortURL := lib.Trans2short(ourl)
+	d.ShortURL = shortURL
+	model.SaveURL(d)
+	c.JSON(http.StatusOK, d)
 
-	// model.SaveURL()
 }
