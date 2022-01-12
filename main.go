@@ -8,7 +8,9 @@ import (
 )
 
 func main() {
+
 	model.InitMongo()
+
 	r := gin.Default()
 	router.RegisterRouter(r)
 	r.Run(":8888")
