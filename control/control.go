@@ -21,9 +21,13 @@ func Hello(c *gin.Context) {
 func Default(c *gin.Context) {
 	s := c.Param("short")
 	fmt.Println(s)
+	ourl err := model.GetURL(s)
+	if err != nil {
+		c.JSON(http.StatusOK,"aaaaaaa")
+	}
 	//todo chaxun
 	//ourl := "http://81.70.91.175:8888/v1/test"
-	ourl := "https://baidu.com"
+	//ourl := "https://baidu.com"
 	c.Redirect(http.StatusMovedPermanently, ourl)
 }
 

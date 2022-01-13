@@ -62,24 +62,28 @@ func test() {
 // 存储url
 func SaveURL(d *URLData) {
 	collection := db.Collection("urls")
-	insert, err := collection.InsertOne(context.TODO(), d)
+	ctx, cancel := context.WithCancel(context.TODO())
+	defer cancel()
+
+	insert, err := collection.InsertOne(ctx, d)
 	if err != nil {
 		fmt.Println("insert failed")
 	}
 	fmt.Println(insert)
 }
 
-//func GetURL(s string) {
+func GetURL(s string) (string, error) {
+	r2 := bson.M{}
+	collection := db.Collection("urls")
+	filter := bson.M{"short_url": s}
 
-//	collection := db.Collection("urls")
-//	filter := bson.M{"short_url": s}
-//	if cursor, err := collection.Find(context.TODO(), filter, options.Find().SetSkip(0), options.Find().SetLimit(1)); err != nil {
-//		fmt.Println("find fail")
-//	}
-//	defer func() {
-//		if err := cursor.Close(context.TODO()); err != nil {
-//			fmt.Println("cursor fial")
-//		}
-//	}()
-
-//}
+	ctx, cancel := context.WithCancel(context.TODO())
+	sresult := collection.FindOne(ctx, filter)
+	err := sresult.Decode(r2)
+	if err != nil {
+		fmt.Printf("no data in mongo with %s", s)
+		return "", fmt.Errorf("aaaaaa")
+	}
+	defer cancel()
+	return r2["origin_url"].(string), nil
+}
