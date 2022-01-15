@@ -6,6 +6,11 @@ import (
 )
 
 func TestTrans(t *testing.T) {
-	a := Trans2short("asdasdasd")
+	var tt TransMD5
+	a := tt.Trans2Short("asdasdasd")
 	fmt.Println(a)
+}
+
+func TestBase62(t *testing.T) {
+	fmt.Println(Encode(11222))
 }
