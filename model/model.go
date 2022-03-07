@@ -78,12 +78,16 @@ func GetURL(s string) (string, error) {
 	filter := bson.M{"short_url": s}
 
 	ctx, cancel := context.WithCancel(context.TODO())
+	defer cancel()
 	sresult := collection.FindOne(ctx, filter)
 	err := sresult.Decode(r2)
 	if err != nil {
 		fmt.Printf("no data in mongo with %s", s)
 		return "", fmt.Errorf("aaaaaa")
 	}
-	defer cancel()
 	return r2["origin_url"].(string), nil
+}
+
+func IsExist(s string) bool {
+	return true
 }

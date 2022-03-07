@@ -1,5 +1,6 @@
 package lib
 
+// 将自增数字10进制转化成62进制
 import (
 	"math"
 	"strings"
