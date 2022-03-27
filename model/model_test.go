@@ -9,5 +9,6 @@ func TestConnect(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	InitMongo()
-	GetURL("1wwi2")
+	GetOriginURL("1wwi2")
+
 }

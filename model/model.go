@@ -20,6 +20,10 @@ func InitMongo() {
 		log.Fatal(err)
 	}
 	err = client.Ping(ctx, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Println("Connected to MongoDB!")
 	db = client.Database("test")
 
@@ -72,22 +76,34 @@ func SaveURL(d *URLData) {
 	fmt.Println(insert)
 }
 
-func GetURL(s string) (string, error) {
-	r2 := bson.M{}
+func GetOriginURL(s string) (string, error) {
 	collection := db.Collection("urls")
 	filter := bson.M{"short_url": s}
-
+	fmt.Printf("shortv = %s \n", s)
 	ctx, cancel := context.WithCancel(context.TODO())
 	defer cancel()
 	sresult := collection.FindOne(ctx, filter)
-	err := sresult.Decode(r2)
+
+	var result bson.M
+	err := sresult.Decode(&result)
 	if err != nil {
-		fmt.Printf("no data in mongo with %s", s)
-		return "", fmt.Errorf("aaaaaa")
+		fmt.Printf("no data in mongo with %s, err = %s", s, err)
+		return "", fmt.Errorf("no data")
 	}
-	return r2["origin_url"].(string), nil
+	return result["origin_url"].(string), nil
 }
 
 func IsExist(s string) bool {
+	collection := db.Collection("urls")
+	filter := bson.M{"short_url": s}
+	fmt.Printf("shortv = %s \n", s)
+	ctx, cancel := context.WithCancel(context.TODO())
+	defer cancel()
+	sresult := collection.FindOne(ctx, filter)
+	var result bson.M
+	err := sresult.Decode(&result)
+	if err != nil {
+		return false
+	}
 	return true
 }

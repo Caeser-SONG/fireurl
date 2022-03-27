@@ -20,18 +20,19 @@ func Hello(c *gin.Context) {
 // 取path 到db中查询原url，再重定向到该url
 func Default(c *gin.Context) {
 	s := c.Param("short")
-	fmt.Println(s)
-	ourl, err := model.GetURL(s)
+
+	ourl, err := model.GetOriginURL(s)
 	if err != nil {
-		c.JSON(http.StatusOK, "aaaaaaa")
+		c.JSON(http.StatusOK, err)
 	}
 	//todo chaxun
 	//ourl := "http://81.70.91.175:8888/v1/test"
 	//ourl := "https://baidu.com"
 	c.Redirect(http.StatusFound, ourl)
+	//c.JSON(200, ourl)
 }
 
-// 获取短链接
+// 生成短链接
 func GetShortURL(c *gin.Context) {
 	d := new(model.URLData)
 	ourl, ok := c.GetPostForm("origin_url")
@@ -44,6 +45,7 @@ func GetShortURL(c *gin.Context) {
 	}
 
 	d.OriginURL = ourl
+	fmt.Printf("TIME = %s \n", time)
 	time1, err := strconv.ParseInt(time, 10, 64)
 	if err != nil {
 		fmt.Println("time tans into int64 fail")
@@ -52,7 +54,7 @@ func GetShortURL(c *gin.Context) {
 	fmt.Println(ourl)
 	fmt.Println(time)
 	var transer lib.Transer
-	transer = new(lib.TransBase62)
+	transer = new(lib.TransMD5)
 	// 长变短
 
 	shortURL := transer.Trans2Short(ourl)
