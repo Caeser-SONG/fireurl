@@ -1,14 +1,24 @@
 package model
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
-func TestConnect(t *testing.T) {
+func rrTestConnect(t *testing.T) {
 	InitMongo()
 	test()
 }
 
-func TestGet(t *testing.T) {
+func rrTestGet(t *testing.T) {
 	InitMongo()
 	GetOriginURL("1wwi2")
+
+}
+
+func TestExist(t *testing.T) {
+	InitMongo()
+	fmt.Println(IsExist("aaswws"))
+	fmt.Println(IsExist("6f698"))
 
 }

@@ -1,19 +1,18 @@
 package control
 
 import (
+	"fireurl/lib"
+	"fireurl/model"
 	"fmt"
 	"log"
 	"net/http"
-
-	"fireurl/lib"
-	"fireurl/model"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Hello(c *gin.Context) {
-	c.JSON(http.StatusOK, "aaaaaaa")
+	c.JSON(http.StatusOK, "hello world")
 }
 
 // 处理重定向请求
@@ -26,8 +25,6 @@ func Default(c *gin.Context) {
 		c.JSON(http.StatusOK, err)
 	}
 	//todo chaxun
-	//ourl := "http://81.70.91.175:8888/v1/test"
-	//ourl := "https://baidu.com"
 	c.Redirect(http.StatusFound, ourl)
 	//c.JSON(200, ourl)
 }
@@ -43,23 +40,23 @@ func GetShortURL(c *gin.Context) {
 	if !ok {
 		fmt.Println("no param exptime")
 	}
-
 	d.OriginURL = ourl
-	fmt.Printf("TIME = %s \n", time)
+
 	time1, err := strconv.ParseInt(time, 10, 64)
 	if err != nil {
 		fmt.Println("time tans into int64 fail")
 	}
 	d.Exptime = time1
-	fmt.Println(ourl)
-	fmt.Println(time)
 	var transer lib.Transer
 	transer = new(lib.TransMD5)
 	// 长变短
-
 	shortURL := transer.Trans2Short(ourl)
+	// find 是否存在
 	d.ShortURL = shortURL
+	if model.IsExist(shortURL) {
+		c.JSON(http.StatusOK, d)
+		return
+	}
 	model.SaveURL(d)
 	c.JSON(http.StatusOK, d)
-
 }
